@@ -37,7 +37,7 @@ class RRT(object):
         root_id = self.tree.add_vertex(self.start)
 
         print(self.max_itr)
-
+        self.max_itr = int(self.max_itr * 2)
         for i in range(self.max_itr):
             # 1) Sample
             q_rand = self.bb.sample_random_config(self.goal_prob, self.goal)
