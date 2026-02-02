@@ -8,3 +8,6 @@ STEP: right_arm => [cube pickup -> meeting], left_arm static
 STEP: left_arm => [start -> meeting], right_arm static
 STEP: left_arm => [meeting -> place approach], right_arm static
 STEP: right_arm => [start -> cube pickup], left_arm static
+STEP: right_arm => [cube pickup -> meeting], left_arm static
+STEP: left_arm => [start -> meeting], right_arm static
+STEP: left_arm => [meeting -> place approach], right_arm static

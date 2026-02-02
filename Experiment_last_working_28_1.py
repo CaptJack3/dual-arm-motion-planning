@@ -63,6 +63,12 @@ class Experiment:
     def push_step_info_into_single_cube_passing_data(
         self, description, active_id, command, static_conf, path, cubes, gripper_pre, gripper_post
     ):
+        # convert numpy arrays to lists
+        if isinstance(static_conf, np.ndarray):
+            static_conf = static_conf.tolist()
+        path = [p.tolist() if isinstance(p, np.ndarray) else p for p in path]
+        cubes = [c.tolist() if isinstance(c, np.ndarray) else c for c in cubes]
+
         self.experiment_result[-1]["description"].append(description)
         self.experiment_result[-1]["active_id"].append(active_id)
         self.experiment_result[-1]["command"].append(command)
@@ -208,7 +214,8 @@ class Experiment:
             LocationType.RIGHT,
             "movel",
             left_arm_start. tolist(),
-            cube_approach, # [0, 0, -0.14],
+            # cube_approach, # [0, 0, -0.14],
+            [0, 0, -0.14],
             [list(cube) for cube in cubes],
             Gripper.STAY,
             Gripper.CLOSE,
@@ -291,7 +298,7 @@ class Experiment:
             LocationType.LEFT,
             "movel",
             right_at_meeting.tolist(),
-            [-0.06, 0, 0],
+            [0.06, 0, 0], #[-0.06, 0, 0]?
             cubes_wo_i_ll,
             Gripper.STAY,
             Gripper.CLOSE,
@@ -311,7 +318,7 @@ class Experiment:
             LocationType.LEFT,
             "movel",
             right_at_meeting.tolist(),
-            [0.06, 0, 0],
+            [-0.06, 0, 0], # [0.06, 0, 0]?
             cubes_wo_i_ll,
             Gripper.STAY,
             Gripper.STAY,
@@ -475,7 +482,8 @@ class Experiment:
 
         # also tilt around Y (changes face / approach)
         rpy_left = [-np.pi/2, np.pi , np.pi]  # your requested type of change
-        rpy_left = [np.pi/2,np.pi/2,0.0]  # YOTAM your requested type of change
+        rpy_left = [np.pi/2,np.pi/2,0.0]  # YOTAM your requested type of change THIS ONE SEEMS TO WORK
+        # rpy_left = [-np.pi/2,0.0,np.pi/2]  # YOTAM your requested type of change CURRNENTLY USED
 
         # ---- RIGHT ARM IK ----
         update_environment(env, LocationType.RIGHT, self.left_arm_home, self.cubes)

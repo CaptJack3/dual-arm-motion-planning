@@ -68,6 +68,12 @@ class Experiment:
         movel_end_conf:
           - optional end joint conf (len=6) computed via IK for visualization/debug
         """
+        # convert numpy arrays to lists
+        if isinstance(static_conf, np.ndarray):
+            static_conf = static_conf.tolist()
+        path = [p.tolist() if isinstance(p, np.ndarray) else p for p in path]
+        cubes = [c.tolist() if isinstance(c, np.ndarray) else c for c in cubes]
+
         self.experiment_result[-1]["description"].append(description)
         self.experiment_result[-1]["active_id"].append(int(active_id))
         self.experiment_result[-1]["command"].append(command)
