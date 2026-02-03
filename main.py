@@ -4,7 +4,8 @@ import traceback
 import faulthandler
 
 # from Experiment_last_working_28_1 import Experiment
-from Experiment_last_working_2_2 import Experiment
+# from Experiment_last_working_2_2 import Experiment
+from Simultaneous.Experiment_last_working_2_2 import Experiment 
 
 
 def run_attempts(n=10):
