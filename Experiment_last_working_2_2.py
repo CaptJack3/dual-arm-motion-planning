@@ -61,7 +61,7 @@ class Experiment:
         self.left_arm_meeting_conf = None
 
     def push_step_info_into_single_cube_passing_data(
-        self, description, active_id, command, static_conf, path, cubes, gripper_pre, gripper_post
+            self, description, active_id, command, static_conf, path, cubes, gripper_pre, gripper_post
     ):
         # convert numpy arrays to lists
         if isinstance(static_conf, np.ndarray):
@@ -93,23 +93,23 @@ class Experiment:
         planner.tree = RRTTree(planner.bb)
 
     def plan_single_arm(
-        self,
-        planner,
-        start_conf,
-        goal_conf,
-        description,
-        active_id,
-        command,
-        static_arm_conf,
-        cubes_real,
-        gripper_pre,
-        gripper_post,
+            self,
+            planner,
+            start_conf,
+            goal_conf,
+            description,
+            active_id,
+            command,
+            static_arm_conf,
+            cubes_real,
+            gripper_pre,
+            gripper_post,
     ):
         # Reset planner per segment (prevents cross-contamination between calls)
         self._reset_planner_for_segment(planner)
 
         # Your planners.py signature is find_path(self, start_conf, goal_conf) (NO manipulator arg)
-        path,cost = planner.find_path(start_conf=start_conf, goal_conf=goal_conf)
+        path, cost = planner.find_path(start_conf=start_conf, goal_conf=goal_conf)
 
         if path is None:
             raise RuntimeError(f"Planner failed: no path found for segment '{description}' (active={active_id}).")
@@ -127,18 +127,18 @@ class Experiment:
         )
 
     def plan_single_cube_passing(
-        self,
-        cube_i,
-        cubes,
-        left_arm_start,
-        right_arm_start,
-        env,
-        bb_left,
-        bb_right,
-        planner_left,
-        planner_right,
-        left_arm_transform,
-        right_arm_transform,
+            self,
+            cube_i,
+            cubes,
+            left_arm_start,
+            right_arm_start,
+            env,
+            bb_left,
+            bb_right,
+            planner_left,
+            planner_right,
+            left_arm_transform,
+            right_arm_transform,
     ):
         # add a new step entry
         single_cube_passing_info = {
@@ -206,16 +206,16 @@ class Experiment:
         self.experiment_result[-1]["gripper_pre"].append(gripper_pre)
         self.experiment_result[-1]["gripper_post"].append(gripper_post)
 
-        
-        
+
+
         '''
         self.push_step_info_into_single_cube_passing_data(
             "picking up a cube: go down",
             LocationType.RIGHT,
             "movel",
-            left_arm_start. tolist(),
+            left_arm_start.tolist(),
             # cube_approach, # [0, 0, -0.14],
-            [0, 0, -0.1], # [0,0,-0.14]
+            [0, 0, -0.11],
             [list(cube) for cube in cubes],
             Gripper.STAY,
             Gripper.CLOSE,
@@ -228,7 +228,7 @@ class Experiment:
             LocationType.RIGHT,
             "movel",
             left_arm_start.tolist(),
-            [0, 0, 0.14],
+            [0, 0, 0.11],
             cubes_ll,
             Gripper.STAY,
             Gripper.STAY,
@@ -283,120 +283,119 @@ class Experiment:
         # ============================
         # Segment 4: handover micro motions (movel)
         # ============================
-        # self.push_step_info_into_single_cube_passing_data(
-        #     "handover: right arm approaches",
-        #     LocationType.RIGHT,
-        #     "movel",
-        #     left_at_meeting.tolist(),
-        #     [0.0, 0.05, 0.0],
-        #     cubes_wo_i_ll,
-        #     Gripper.STAY,
-        #     Gripper.STAY,
-        # )
-        # self.push_step_info_into_single_cube_passing_data(
-        #     "handover: left arm approaches + grasps",
-        #     LocationType.LEFT,
-        #     "movel",
-        #     right_at_meeting.tolist(),
-        #     [0.00, -0.05, 0.0], #[-0.06, 0, 0]?
-        #     cubes_wo_i_ll,
-        #     Gripper.STAY,
-        #     Gripper.CLOSE,
-        # )
-        # self.push_step_info_into_single_cube_passing_data(
-        #     "handover: right releases + retreats",
-        #     LocationType.RIGHT,
-        #     "movel",
-        #     left_at_meeting.tolist(),
-        #     [0.00, -0.05, 0],
-        #     cubes_wo_i_ll,
-        #     Gripper.OPEN,
-        #     Gripper.STAY,
-        # )
-        # self.push_step_info_into_single_cube_passing_data(
-        #     "handover: left retreats",
-        #     LocationType.LEFT,
-        #     "movel",
-        #     right_at_meeting.tolist(),
-        #     [-0.00, 0.05, 0], # [0.06, 0, 0]?
-        #     cubes_wo_i_ll,
-        #     Gripper.STAY,
-        #     Gripper.STAY,
-        # )
+        self.push_step_info_into_single_cube_passing_data(
+            "handover: right arm approaches",
+            LocationType.RIGHT,
+            "movel",
+            left_at_meeting.tolist(),
+            [-0.1, 0, 0],
+            cubes_wo_i_ll,
+            Gripper.STAY,
+            Gripper.STAY,
+        )
+        self.push_step_info_into_single_cube_passing_data(
+            "handover: left arm approaches + grasps",
+            LocationType.LEFT,
+            "movel",
+            right_at_meeting.tolist(),
+            [-0.1, 0, 0],  # [-0.06, 0, 0]?
+            cubes_wo_i_ll,
+            Gripper.STAY,
+            Gripper.CLOSE,
+        )
+        self.push_step_info_into_single_cube_passing_data(
+            "handover: right releases + retreats",
+            LocationType.RIGHT,
+            "movel",
+            left_at_meeting.tolist(),
+            [0.1, 0, 0],
+            cubes_wo_i_ll,
+            Gripper.OPEN,
+            Gripper.STAY,
+        )
+        self.push_step_info_into_single_cube_passing_data(
+            "handover: left retreats",
+            LocationType.LEFT,
+            "movel",
+            right_at_meeting.tolist(),
+            [0.1, 0, 0],  # [0.06, 0, 0]?
+            cubes_wo_i_ll,
+            Gripper.STAY,
+            Gripper.STAY,
+        )
 
-        # # ============================
-        # # Segment 5: LEFT meeting -> place approach (IK + RRT*)
-        # # ============================
-        # right_corner = np.array(env.cube_area_corner[LocationType.RIGHT], dtype=float)
-        # left_corner = np.array(env.cube_area_corner[LocationType.LEFT], dtype=float)
-        #
-        # cube_pos = np.array(cubes[cube_i], dtype=float)
-        # local_offset = cube_pos - right_corner
-        # place_cube_pos = left_corner + local_offset
-        #
-        # cube_side = 0.04
-        # place_cube_pos[2] = cube_side / 2.0
-        #
-        # above_place = 0.25
-        # p_place_approach = place_cube_pos + np.array([0.0, 0.0, above_place], dtype=float)
-        # rpy_place = [np.pi, 0.0, 0.0]
-        # rpy_left = [np.pi, np.pi / 2, np.pi]  # TODO - not sure if right
-        #
-        #
-        # update_environment(env, LocationType.LEFT, right_at_meeting, cubes_wo_i)
-        # T_place = left_arm_transform.get_base_to_tool_transform(position=p_place_approach, rpy=rpy_place)
-        # IKp = inverse_kinematics.inverse_kinematic_solution(inverse_kinematics.DH_matrix_UR5e, T_place)
-        #
-        # validp = bb_left.validate_IK_solutions(IKp, T_place)
-        # if len(validp) == 0:
-        #     raise RuntimeError("TODO3: no valid IK for cleft place-approach. Try changing above_place or rpy_place.")
-        #
-        # left_place_approach = min(validp, key=lambda q: np.linalg.norm(q - left_at_meeting))
-        #
-        # description = "left_arm => [meeting -> place approach], right_arm static"
-        # log(msg=description)
-        # update_environment(env, LocationType.LEFT, right_at_meeting, cubes_wo_i)
-        #
-        # self.plan_single_arm(
-        #     planner_left,
-        #     left_at_meeting,
-        #     left_place_approach,
-        #     description,
-        #     LocationType.LEFT,
-        #     "move",
-        #     right_at_meeting,
-        #     cubes_wo_i,
-        #     Gripper.STAY,
-        #     Gripper.STAY,
-        # )
-        #
-        # # down + open, then up
-        # self.push_step_info_into_single_cube_passing_data(
-        #     "dropping a cube: go down",
-        #     LocationType.LEFT,
-        #     "movel",
-        #     right_at_meeting.tolist(),
-        #     [0, 0, -0.25],
-        #     cubes_wo_i_ll,
-        #     Gripper.STAY,
-        #     Gripper.OPEN,
-        # )
-        # self.push_step_info_into_single_cube_passing_data(
-        #     "dropping a cube: go up",
-        #     LocationType.LEFT,
-        #     "movel",
-        #     right_at_meeting.tolist(),
-        #     [0, 0, 0.25],
-        #     cubes_wo_i_ll,
-        #     Gripper.STAY,
-        #     Gripper.STAY,
-        # )
-        #
-        # # Update cube position for next iteration
-        # cubes[cube_i] = place_cube_pos.tolist()
-        #
-        left_arm_end =0 # np.array(left_place_approach, dtype=float)
-        right_arm_end =0 #  right_at_meeting
+        # ============================
+        # Segment 5: LEFT meeting -> place approach (IK + RRT*)
+        # ============================
+        right_corner = np.array(env.cube_area_corner[LocationType.RIGHT], dtype=float)
+        left_corner = np.array(env.cube_area_corner[LocationType.LEFT], dtype=float)
+
+        cube_pos = np.array(cubes[cube_i], dtype=float)
+        local_offset = cube_pos - right_corner
+        place_cube_pos = left_corner + local_offset
+
+        cube_side = 0.04
+        place_cube_pos[2] = cube_side / 2.0
+
+        above_place = 0.25
+        p_place_approach = place_cube_pos + np.array([0.0, 0.0, above_place], dtype=float)
+        rpy_place = [np.pi, 0.0, 0.0]
+        rpy_left = [np.pi, np.pi / 2, np.pi]  # TODO - not sure if right
+
+        update_environment(env, LocationType.LEFT, right_at_meeting, cubes_wo_i)
+        T_place = left_arm_transform.get_base_to_tool_transform(position=p_place_approach, rpy=rpy_place)
+        IKp = inverse_kinematics.inverse_kinematic_solution(inverse_kinematics.DH_matrix_UR5e, T_place)
+
+        validp = bb_left.validate_IK_solutions(IKp, T_place)
+        if len(validp) == 0:
+            raise RuntimeError("TODO3: no valid IK for cleft place-approach. Try changing above_place or rpy_place.")
+
+        left_place_approach = min(validp, key=lambda q: np.linalg.norm(q - left_at_meeting))
+
+        description = "left_arm => [meeting -> place approach], right_arm static"
+        log(msg=description)
+        update_environment(env, LocationType.LEFT, right_at_meeting, cubes_wo_i)
+
+        self.plan_single_arm(
+            planner_left,
+            left_at_meeting,
+            left_place_approach,
+            description,
+            LocationType.LEFT,
+            "move",
+            right_at_meeting,
+            cubes_wo_i,
+            Gripper.STAY,
+            Gripper.STAY,
+        )
+
+        # down + open, then up
+        self.push_step_info_into_single_cube_passing_data(
+            "dropping a cube: go down",
+            LocationType.LEFT,
+            "movel",
+            right_at_meeting.tolist(),
+            [0, 0, -0.25],
+            cubes_wo_i_ll,
+            Gripper.STAY,
+            Gripper.OPEN,
+        )
+        self.push_step_info_into_single_cube_passing_data(
+            "dropping a cube: go up",
+            LocationType.LEFT,
+            "movel",
+            right_at_meeting.tolist(),
+            [0, 0, 0.25],
+            cubes_wo_i_ll,
+            Gripper.STAY,
+            Gripper.STAY,
+        )
+
+        # Update cube position for next iteration
+        cubes[cube_i] = place_cube_pos.tolist()
+
+        left_arm_end = np.array(left_place_approach, dtype=float)
+        right_arm_end = right_at_meeting
         return left_arm_end, right_arm_end
 
     def plan_experiment(self):
@@ -407,12 +406,14 @@ class Experiment:
         ur_params_left = UR5e_without_camera_PARAMS(inflation_factor=1.0)
 
         env = Environment(ur_params=ur_params_right)
-        right_arm_rot =[0 ,0 , -np.pi/2]
-        left_arm_rot =[0 ,0 , np.pi/2]
+        right_arm_rot = [0, 0, -np.pi / 2]
+        left_arm_rot = [0, 0, np.pi / 2]
 
-
-        transform_right_arm = Transform(ur_params=ur_params_right, ur_location=env.arm_base_location[LocationType.RIGHT],ur_rotation=right_arm_rot)
-        transform_left_arm = Transform(ur_params=ur_params_left, ur_location=env.arm_base_location[LocationType.LEFT],ur_rotation=left_arm_rot)
+        transform_right_arm = Transform(ur_params=ur_params_right,
+                                        ur_location=env.arm_base_location[LocationType.RIGHT],
+                                        ur_rotation=right_arm_rot)
+        transform_left_arm = Transform(ur_params=ur_params_left, ur_location=env.arm_base_location[LocationType.LEFT],
+                                       ur_rotation=left_arm_rot)
 
         env.arm_transforms[LocationType.RIGHT] = transform_right_arm
         env.arm_transforms[LocationType.LEFT] = transform_left_arm
@@ -466,14 +467,14 @@ class Experiment:
 
         u = (bL - bR)
         u = u / np.linalg.norm(u)
-        u=np.array([0.0,1.0,0.0])
+        u = np.array([0.0, 1.0, 0.0])
         delta = 0.1
         delta_vec = delta * u
 
         pR = M - delta_vec
         pL = M + delta_vec
 
-        rpy_right = [-np.pi/2, 0.0, 0.0]
+        rpy_right = [-np.pi / 2, 0.0, 0.0]
         # rpy_right = [0.0, 0.0, np.pi/2] #YOTAM
         # rpy_left = [rpy_right[0], rpy_right[1], rpy_right[2] + np.pi / 2] # TODO - that is the right notation of rpy_right
 
@@ -481,8 +482,8 @@ class Experiment:
         # rpy_left = [np.pi, 0.0, np.pi / 2]  # 90° around Z
 
         # also tilt around Y (changes face / approach)
-        rpy_left = [-np.pi/2, np.pi , np.pi]  # your requested type of change
-        rpy_left = [np.pi/2,np.pi/2,0.0]  # YOTAM your requested type of change THIS ONE SEEMS TO WORK
+        rpy_left = [-np.pi / 2, np.pi, np.pi]  # your requested type of change
+        rpy_left = [np.pi / 2, np.pi / 2, 0.0]  # YOTAM your requested type of change THIS ONE SEEMS TO WORK
         # rpy_left = [-np.pi/2,0.0,np.pi/2]  # YOTAM your requested type of change CURRNENTLY USED
 
         # ---- RIGHT ARM IK ----
@@ -516,35 +517,20 @@ class Experiment:
         left_arm_start = self.left_arm_home
         right_arm_start = self.right_arm_home
 
-        # for i in range(len(self.cubes)):
-        #     left_arm_start, right_arm_start = self.plan_single_cube_passing(
-        #         i,
-        #         self.cubes,
-        #         left_arm_start,
-        #         right_arm_start,
-        #         env,
-        #         bb_left,
-        #         bb_right,
-        #         planner_left,
-        #         planner_right,
-        #         transform_left_arm,
-        #         transform_right_arm,
-        #     )
-
-        left_arm_start, right_arm_start = self.plan_single_cube_passing(
-            0,
-            self.cubes,
-            left_arm_start,
-            right_arm_start,
-            env,
-            bb_left,
-            bb_right,
-            planner_left,
-            planner_right,
-            transform_left_arm,
-            transform_right_arm,)
-
-
+        for i in range(len(self.cubes)):
+            left_arm_start, right_arm_start = self.plan_single_cube_passing(
+                i,
+                self.cubes,
+                left_arm_start,
+                right_arm_start,
+                env,
+                bb_left,
+                bb_right,
+                planner_left,
+                planner_right,
+                transform_left_arm,
+                transform_right_arm,
+            )
 
         t2 = time.time()
         print(f"It took t={t2 - start_time} seconds")

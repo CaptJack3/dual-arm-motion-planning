@@ -149,7 +149,7 @@ def IK():
 if __name__ == '__main__':
     # draw_two_robots()
     # connect_move_robots()
-    run_json("plan2.json")
+    run_json("plan.json")
     # create_json()
     # animation("plan_fixed.json")
     # IK()

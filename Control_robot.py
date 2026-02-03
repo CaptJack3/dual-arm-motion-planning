@@ -120,6 +120,8 @@ class BaseRobot:
                         # super(robot_interface.RobotInterfaceWithGripper, robot.active_robot).move_path([curr_conf, conf])
                         # super(robot_interface.RobotInterfaceWithGripper, robot.active_robot).getInverseKinematics()
                     elif step["command"][i] == "movel":
+                        print("Go to sleep for 15 seconds")
+                        # time.sleep(10)
                         relative_pose = step["path"][i]
                         self.moveL_relative(relative_pose)
                     # lastly, check gripper post status
@@ -132,7 +134,16 @@ class BaseRobot:
             [*target_config, speed, acceleration, blend_radius] for target_config in path
         ]
         path_with_params[-1][-1] = 0 # reach the end point
+        current_config = np.array(self.active_robot.getActualQ())
+        goal_config = np.array(path[-1])
+
+        np.max(np.abs(current_config - goal_config)) > 0.1
         self.active_robot.moveJ(path_with_params, asynchronous=asynchronous)
+        current_config = np.array(self.active_robot.getActualQ())
+        goal_config = np.array(path[-1])
+
+        if np.max(np.abs(current_config-goal_config)) > 0.1:
+            self.active_robot.moveJ(goal_config, asynchronous=asynchronous)
 
     def moveL_relative(self, relative_pose):
         self.active_robot.moveL_relative(relative_pose)
