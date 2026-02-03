@@ -4,10 +4,8 @@ STEP: Right meeting target pR = [1.321, 1.2615, 0.5], rpy_right=[-1.570796326794
 STEP: Left  meeting target pL = [1.321, 1.4615000000000002, 0.5], rpy_left=[1.5707963267948966, 1.5707963267948966, 0.0]
 STEP: start planning the experiment.
 STEP: right_arm => [start -> cube pickup], left_arm static
-STEP: right_arm => [cube pickup -> meeting], left_arm static
-STEP: left_arm => [start -> meeting], right_arm static
+STEP: right_arm => [cube pickup -> meeting], left_arm => [start -> meeting]
 STEP: left_arm => [meeting -> place approach], right_arm static
 STEP: right_arm => [start -> cube pickup], left_arm static
-STEP: right_arm => [cube pickup -> meeting], left_arm static
-STEP: left_arm => [start -> meeting], right_arm static
+STEP: right_arm => [cube pickup -> meeting], left_arm => [start -> meeting]
 STEP: left_arm => [meeting -> place approach], right_arm static
