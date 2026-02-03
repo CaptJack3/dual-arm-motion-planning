@@ -94,14 +94,15 @@ class BuildingBlocks3D(object):
         # env.bbox is of the form [[xmin, ymax], [xmax, ymin]]
         if hasattr(self.env, "bbox") and self.env.bbox is not None:
             xmin = float(self.env.bbox[0][0])
-            xmax = float(self.env.bbox[1][0])
+            xmax = float(self.env.bbox[1][0]-0.1) #TODO - check this!!
             ymin = float(self.env.bbox[1][1])
-            ymax = float(self.env.bbox[0][1])
+            ymax = float(self.env.bbox[0][1]-0.1) #TODO - check this!!
 
             all_centers = np.vstack(list(global_sphere_coords.values()))
             xs = all_centers[:, 0]
             ys = all_centers[:, 1]
-            if np.any(xs < xmin) or np.any(xs > xmax) or np.any(ys < ymin) or np.any(ys > ymax):
+            zs = all_centers[:,2]
+            if np.any(xs < xmin) or np.any(xs > xmax) or np.any(ys < ymin) or np.any(ys > ymax) or np.any(zs<0.0):
                 return False
 
         # --- 2. INTERNAL COLLISIONS (Self-Collision) ---

@@ -288,7 +288,7 @@ class Experiment:
             LocationType.RIGHT,
             "movel",
             left_at_meeting.tolist(),
-            [-0.1, 0, 0],
+            [0.0, 0, 0], # -0.1,0,0
             cubes_wo_i_ll,
             Gripper.STAY,
             Gripper.STAY,
@@ -298,7 +298,7 @@ class Experiment:
             LocationType.LEFT,
             "movel",
             right_at_meeting.tolist(),
-            [-0.1, 0, 0],  # [-0.06, 0, 0]?
+            [-0.15, 0, 0],  # [-0.06, 0, 0]?
             cubes_wo_i_ll,
             Gripper.STAY,
             Gripper.CLOSE,
@@ -308,7 +308,7 @@ class Experiment:
             LocationType.RIGHT,
             "movel",
             left_at_meeting.tolist(),
-            [0.1, 0, 0],
+            [0.0, 0, 0], # 0.1,0,0
             cubes_wo_i_ll,
             Gripper.OPEN,
             Gripper.STAY,
@@ -318,7 +318,7 @@ class Experiment:
             LocationType.LEFT,
             "movel",
             right_at_meeting.tolist(),
-            [0.1, 0, 0],  # [0.06, 0, 0]?
+            [0.15, 0, 0],  # [0.06, 0, 0]?
             cubes_wo_i_ll,
             Gripper.STAY,
             Gripper.STAY,
@@ -542,8 +542,8 @@ class Experiment:
             outfile.write(json_object)
 
         # show the experiment then export it to a GIF
-        # visualizer.show_all_experiment(dir_path + "plan.json")
-        # visualizer.animate_by_pngs()
+        visualizer.show_all_experiment(dir_path + "plan.json")
+        visualizer.animate_by_pngs()
 
     def get_cubes_for_experiment(self, experiment_id, env):
         cube_side = 0.04

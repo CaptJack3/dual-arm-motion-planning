@@ -94,7 +94,7 @@ def run_json(json_path):
                     curr_conf = step["path"][i][0]
                     if step["command"][i] == "move":
                         # robot.move([curr_conf, conf])
-                        robot.move_path(step["path"][i],False) # Default is false, this means the function will block until the movement has completed.
+                        robot.move_path(step["path"][i], False) # Default is false, this means the function will block until the movement has completed.
                         # super(robot_interface.RobotInterfaceWithGripper, robot.active_robot).move_path([curr_conf, conf])
                         # super(robot_interface.RobotInterfaceWithGripper, robot.active_robot).getInverseKinematics()
                     elif step["command"][i] == "movel":
